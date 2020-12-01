@@ -27,7 +27,6 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
      - "80:80"
-     - "5000:5000"
      - "443:443"
   
   frontend:
@@ -37,3 +36,5 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: frontend
+    environment:
+      - VIRTUAL_HOST=35.224.173.235 # SHOULD BE DOMAIN HERE

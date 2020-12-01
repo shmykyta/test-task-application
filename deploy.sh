@@ -15,7 +15,9 @@ gcloud compute ssh ${SERVER_NAME} --zone=us-central1-a << EOF
     cd ${APP_NAME}
   else
     cd ${APP_NAME}
+    git stash
     git pull
+    docker-compose down
     echo "Pull the latest update"
   fi
   docker-compose build
