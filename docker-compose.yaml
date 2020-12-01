@@ -1,0 +1,39 @@
+version: "2.1"
+
+x-twingate-common:
+  &twingate-common
+  networks:
+    - twingate-network
+  logging:
+       driver: json-file
+       options:
+         tag: "{{.Name}}"
+
+networks:
+  twingate-network:
+    name: twingate-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.100.0/23
+
+services:
+  nginx-proxy:
+    <<: *twingate-common
+    image: jwilder/nginx-proxy
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+     - "80:80"
+     - "5000:5000"
+     - "443:443"
+  
+  frontend:
+    <<: *twingate-common
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    container_name: frontend
